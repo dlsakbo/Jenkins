@@ -2,36 +2,54 @@ pipeline{
     agent any
     stages{
         stage("Build"){
-            steps{
-                echo "Building ..."
-            }
-            post{
-                always{
-                    mail to: "dlsakbo@gmail.com",
-                    subject: "Build Status Email",
-                    body: "Build log attached!"
-                }
-            }
+        steps{
+            echo "Building..."
+            echo "Build automation tool: Maven"
         }
-        stage("Test"){
-            steps{
-                echo "Testing ..."
-                echo "static code analysis by SonarQube"
-                echo "Automataion testing by maven"
-                echo "Running unit testing by Junit testing"
-                echo "Running Security testing by OWASP ZAP"
-            }
+    }
+        stage("Unit and Integration Test"){
+        steps{
+            echo"Running tests..."
+            echo "Test automation tool: Katalon"
         }
-        stage("Deploy"){
-            steps{
-                echo "Deploying ..."
-                echo " Deploying into AWS E2C"
-            }
-        }
-        stage("Complete"){
-            steps{
-                echo "Completed."
+        post{
+            success{
+                mail to: "dlsakbo@gmail.com",
+                subject: "build status email",
+                body: "build was successful!"
             }
         }
     }
-}
+        stage("Code analyse"){
+            steps{
+                echo "Analysing code..."
+                echo "code analyse tool: SonarQube"
+        }
+    }
+        stage("Security scan"){
+            steps{
+                echo "Analysing code..."
+                echo "Security scan tool: Checkmarx"
+        }
+        post{
+            success{
+                mail to: "dlsakbo@gmail.com",
+                subject: "build status email",
+                body: "build was successful!"
+            }
+        }
+    }
+        stage("Integration Tests on Staging "){
+            steps{
+                echo "Testing stages..."
+        }
+    }
+        stage("Deploy"){
+            steps{
+                echo "Deploying..."
+                echo "Production server: AWS EC2"
+        }
+    }
+        
+        }
+    }
